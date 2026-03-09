@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Axiom Notes — Precision Mathematics. Beautifully Typeset.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-chtml.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0d0d0d;
+    --paper: #fafaf8;
+    --rule: #e0e0dc;
+    --blue: #1a237e;
+    --blue-soft: #e8eaf6;
+    --grey: #888880;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'DM Sans', system-ui, sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 4vw;
+    background: rgba(250,250,248,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .nav-brand {
+    font-family: var(--serif);
+    font-size: 1.4rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .nav-brand span { color: var(--blue); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase;
+    text-decoration: none; color: var(--grey); font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-cta {
+    background: var(--blue); color: #fff !important;
+    padding: 0.45rem 1.1rem; border-radius: 2px;
+    font-size: 0.78rem !important; letter-spacing: 0.1em !important;
+    transition: opacity 0.2s !important;
+  }
+  .nav-cta:hover { opacity: 0.85; }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+  .hamburger span { width: 22px; height: 1.5px; background: var(--ink); display: block; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 10rem 4vw 6rem;
+    position: relative; overflow: hidden;
+    text-align: center;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .math-symbols {
+    position: absolute;
+    font-family: var(--serif);
+    color: rgba(26,35,126,0.045);
+    user-select: none; pointer-events: none;
+    animation: drift 20s ease-in-out infinite;
+  }
+  @keyframes drift {
+    0%,100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-18px) rotate(2deg); }
+  }
+  .hero-content { position: relative; z-index: 1; max-width: 780px; }
+  .hero-eyebrow {
+    font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--blue); font-weight: 500; margin-bottom: 1.5rem;
+    display: flex; align-items: center; justify-content: center; gap: 0.8rem;
+  }
+  .hero-eyebrow::before, .hero-eyebrow::after {
+    content: ''; width: 28px; height: 1px; background: var(--blue);
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(2.8rem, 6vw, 5.2rem);
+    font-weight: 300;
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin-bottom: 1.5rem;
+  }
+  .hero h1 em { font-style: italic; color: var(--blue); }
+  .hero-sub {
+    font-size: 1.05rem; color: var(--grey); max-width: 520px;
+    margin: 0 auto 0.8rem; line-height: 1.7; font-weight: 300;
+  }
+  .hero-targets {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem;
+    margin-bottom: 2.5rem;
+  }
+  .tag {
+    font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--blue); background: var(--blue-soft);
+    padding: 0.3rem 0.85rem; border-radius: 20px; font-weight: 500;
+  }
+  .hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--blue); color: #fff;
+    padding: 0.85rem 2.2rem; border-radius: 2px;
+    font-size: 0.82rem; letter-spacing: 0.1em; text-transform: uppercase;
+    font-weight: 500; text-decoration: none; border: none; cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+  }
+  .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+  .btn-outline {
+    background: transparent; color: var(--ink);
+    padding: 0.85rem 2.2rem; border-radius: 2px;
+    font-size: 0.82rem; letter-spacing: 0.1em; text-transform: uppercase;
+    font-weight: 500; text-decoration: none;
+    border: 1px solid var(--rule); cursor: pointer;
+    transition: border-color 0.2s, transform 0.15s;
+  }
+  .btn-outline:hover { border-color: var(--ink); transform: translateY(-1px); }
+  .hero-scroll {
+    position: absolute; bottom: 2.5rem; left: 50%;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+    font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--grey);
+    animation: bob 2s ease-in-out infinite;
+  }
+  @keyframes bob { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(5px); } }
+  .hero-scroll::after { content: '↓'; font-size: 0.9rem; }
+
+  /* ── SECTIONS ── */
+  section { padding: 6rem 4vw; }
+  .section-label {
+    font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--blue); font-weight: 500; margin-bottom: 0.8rem;
+  }
+  .section-title {
+    font-family: var(--serif); font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 300; line-height: 1.2; margin-bottom: 1rem;
+  }
+  .section-sub { color: var(--grey); font-size: 1rem; max-width: 480px; line-height: 1.7; font-weight: 300; }
+  hr.rule { border: none; border-top: 1px solid var(--rule); margin: 0; }
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  /* ── WHY ── */
+  .why { background: #fff; }
+  .why-grid {
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 2px;
+    margin-top: 4rem; border: 1px solid var(--rule);
+  }
+  .why-card {
+    padding: 2.5rem; border-right: 1px solid var(--rule);
+    position: relative;
+  }
+  .why-card:last-child { border-right: none; }
+  .why-num {
+    font-family: var(--serif); font-size: 3.5rem; font-weight: 300;
+    color: var(--rule); line-height: 1; margin-bottom: 1.2rem;
+  }
+  .why-card h3 {
+    font-family: var(--serif); font-size: 1.4rem; font-weight: 400;
+    margin-bottom: 0.8rem;
+  }
+  .why-card p { color: var(--grey); font-size: 0.92rem; line-height: 1.7; font-weight: 300; }
+  .why-icon { font-size: 1.4rem; margin-bottom: 1rem; }
+
+  /* ── SAMPLE PREVIEW ── */
+  .sample { background: var(--paper); }
+  .sample-inner {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
+    align-items: center; margin-top: 3rem;
+  }
+  .sample-doc {
+    background: #fff;
+    border: 1px solid var(--rule);
+    padding: 2.5rem;
+    font-size: 0.88rem;
+    box-shadow: 0 4px 40px rgba(0,0,0,0.06);
+    position: relative;
+  }
+  .sample-doc::before {
+    content: 'AXIOM NOTES — SAMPLE';
+    position: absolute; top: 1rem; right: 1.2rem;
+    font-size: 0.6rem; letter-spacing: 0.15em; color: var(--grey);
+  }
+  .doc-title {
+    font-family: var(--serif); font-size: 1.1rem; font-weight: 600;
+    border-bottom: 1px solid var(--rule); padding-bottom: 0.8rem; margin-bottom: 1.2rem;
+  }
+  .doc-section { margin-bottom: 1.2rem; }
+  .doc-section-label {
+    font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--blue); font-weight: 600; margin-bottom: 0.4rem;
+  }
+  .doc-box {
+    background: var(--blue-soft);
+    border-left: 3px solid var(--blue);
+    padding: 0.8rem 1rem; font-size: 0.85rem; line-height: 1.6;
+    font-style: italic; color: var(--ink);
+  }
+  .doc-proof { font-size: 0.85rem; line-height: 1.8; color: #333; }
+  .doc-proof .qed {
+    float: right; font-size: 0.75rem; letter-spacing: 0.12em; color: var(--grey);
+  }
+  .doc-math {
+    background: #f7f7f5; padding: 0.7rem 1rem; border-radius: 2px;
+    text-align: center; margin: 0.5rem 0; font-size: 1rem;
+    overflow-x: auto;
+  }
+  .sample-info h3 { font-family: var(--serif); font-size: 1.8rem; font-weight: 300; margin-bottom: 1rem; }
+  .sample-info p { color: var(--grey); font-size: 0.95rem; line-height: 1.7; margin-bottom: 1.5rem; font-weight: 300; }
+  .feature-list { list-style: none; margin-bottom: 2rem; }
+  .feature-list li {
+    display: flex; align-items: center; gap: 0.7rem;
+    font-size: 0.9rem; padding: 0.4rem 0; color: var(--ink);
+    border-bottom: 1px solid var(--rule);
+  }
+  .feature-list li::before { content: '—'; color: var(--blue); font-weight: 300; }
+
+  /* ── CATALOG ── */
+  .catalog { background: #fff; }
+  .catalog-grid {
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem;
+    margin-top: 3rem;
+  }
+  .card {
+    border: 1px solid var(--rule); padding: 2rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    position: relative; cursor: default;
+    display: flex; flex-direction: column;
+  }
+  .card:hover { border-color: var(--blue); box-shadow: 0 8px 40px rgba(26,35,126,0.07); }
+  .card-level {
+    font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--blue); font-weight: 600; margin-bottom: 0.7rem;
+  }
+  .card h3 { font-family: var(--serif); font-size: 1.35rem; font-weight: 400; margin-bottom: 0.5rem; }
+  .card-topics { list-style: none; margin-bottom: 1.2rem; }
+  .card-topics li {
+    font-size: 0.8rem; color: var(--grey); padding: 0.2rem 0;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .card-topics li::before { content: '·'; color: var(--blue); }
+  .card-meta {
+    display: flex; gap: 1rem; font-size: 0.78rem;
+    color: var(--grey); margin-bottom: 1.4rem; padding-top: 1rem;
+    border-top: 1px solid var(--rule); flex-wrap: wrap;
+  }
+  .card-meta span { display: flex; align-items: center; gap: 0.3rem; }
+  .card-price { font-family: var(--serif); font-size: 1.8rem; font-weight: 400; margin-top: auto; margin-bottom: 1rem; }
+  .card-price small { font-size: 0.8rem; font-family: var(--sans); color: var(--grey); }
+  .card-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+  .btn-sm-outline {
+    padding: 0.55rem; border: 1px solid var(--rule); background: transparent;
+    font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase;
+    cursor: pointer; text-align: center; text-decoration: none; color: var(--ink);
+    border-radius: 2px; font-family: var(--sans); font-weight: 500;
+    transition: all 0.15s;
+  }
+  .btn-sm-outline:hover { border-color: var(--ink); }
+  .btn-sm-primary {
+    padding: 0.55rem; background: var(--blue); color: #fff;
+    font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase;
+    cursor: pointer; text-align: center; text-decoration: none;
+    border: 1px solid var(--blue); border-radius: 2px;
+    font-family: var(--sans); font-weight: 500;
+    transition: opacity 0.15s;
+  }
+  .btn-sm-primary:hover { opacity: 0.85; }
+
+  /* ── AUDIENCE ── */
+  .audience { background: var(--paper); }
+  .audience-grid {
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 0;
+    border: 1px solid var(--rule); margin-top: 3rem;
+  }
+  .audience-card {
+    padding: 2.5rem; border-right: 1px solid var(--rule); text-align: center;
+  }
+  .audience-card:last-child { border-right: none; }
+  .audience-emoji { font-size: 2rem; margin-bottom: 1rem; }
+  .audience-card h3 { font-family: var(--serif); font-size: 1.2rem; font-weight: 400; margin-bottom: 0.6rem; }
+  .audience-card p { font-size: 0.85rem; color: var(--grey); line-height: 1.7; font-weight: 300; }
+
+  /* ── TRUST ── */
+  .trust { background: var(--blue); color: #fff; }
+  .trust .section-label { color: rgba(255,255,255,0.5); }
+  .trust .section-title { color: #fff; max-width: 600px; }
+  .trust .section-sub { color: rgba(255,255,255,0.65); }
+  .trust-pillars {
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 2rem; margin-top: 3rem;
+  }
+  .trust-pillar { border-top: 1px solid rgba(255,255,255,0.2); padding-top: 1.2rem; }
+  .trust-pillar h4 { font-family: var(--serif); font-size: 1.1rem; font-weight: 400; color: #fff; margin-bottom: 0.5rem; }
+  .trust-pillar p { font-size: 0.85rem; color: rgba(255,255,255,0.6); line-height: 1.7; font-weight: 300; }
+
+  /* ── GLOBAL ── */
+  .global-section { background: #fff; }
+  .global-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+  .regions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.5rem; }
+  .region {
+    padding: 0.4rem 1rem; border: 1px solid var(--rule);
+    font-size: 0.8rem; letter-spacing: 0.06em; color: var(--grey);
+    border-radius: 2px;
+  }
+  .delivery-box {
+    background: var(--blue-soft); border: 1px solid rgba(26,35,126,0.15);
+    padding: 2.5rem; border-radius: 2px;
+    display: flex; flex-direction: column; gap: 1.5rem;
+  }
+  .delivery-item { display: flex; align-items: flex-start; gap: 1rem; }
+  .delivery-icon {
+    width: 36px; height: 36px; background: var(--blue); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem; flex-shrink: 0; border-radius: 2px;
+  }
+  .delivery-item h4 { font-family: var(--serif); font-size: 1rem; font-weight: 400; margin-bottom: 0.2rem; }
+  .delivery-item p { font-size: 0.82rem; color: var(--grey); font-weight: 300; }
+
+  /* ── FAQ ── */
+  .faq-section { background: var(--paper); }
+  .faq-list { max-width: 680px; margin-top: 3rem; }
+  .faq-item { border-top: 1px solid var(--rule); overflow: hidden; }
+  .faq-item:last-child { border-bottom: 1px solid var(--rule); }
+  .faq-q {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.3rem 0; cursor: pointer; user-select: none;
+    font-size: 0.95rem; font-weight: 500; gap: 1rem;
+  }
+  .faq-toggle {
+    width: 22px; height: 22px; border: 1px solid var(--rule); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem; flex-shrink: 0; transition: all 0.2s; color: var(--blue);
+  }
+  .faq-item.open .faq-toggle { background: var(--blue); color: #fff; border-color: var(--blue); transform: rotate(45deg); }
+  .faq-a {
+    display: none; padding: 0 0 1.3rem;
+    font-size: 0.9rem; color: var(--grey); line-height: 1.7; font-weight: 300;
+  }
+  .faq-item.open .faq-a { display: block; }
+
+  /* ── CTA ── */
+  .cta-section {
+    background: var(--paper); text-align: center; padding: 8rem 4vw;
+    position: relative; overflow: hidden;
+  }
+  .cta-section::before {
+    content: '∑∫∂∞'; font-family: var(--serif);
+    position: absolute; font-size: 12rem; color: rgba(26,35,126,0.03);
+    top: 50%; left: 50%; transform: translate(-50%,-50%);
+    letter-spacing: 2rem; pointer-events: none;
+  }
+  .cta-section h2 {
+    font-family: var(--serif); font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 300; margin-bottom: 0.5rem; position: relative;
+  }
+  .cta-section p { color: var(--grey); margin-bottom: 2.5rem; font-weight: 300; position: relative; }
+  .cta-section .btn-primary { position: relative; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink); color: rgba(255,255,255,0.5);
+    padding: 3.5rem 4vw 2rem;
+  }
+  .footer-top {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem;
+    padding-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 2rem;
+  }
+  .footer-brand-name {
+    font-family: var(--serif); font-size: 1.3rem; color: #fff;
+    letter-spacing: 0.06em; margin-bottom: 0.6rem;
+  }
+  .footer-tagline { font-size: 0.8rem; line-height: 1.6; font-weight: 300; max-width: 240px; }
+  .footer-col h4 {
+    font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(255,255,255,0.3); margin-bottom: 1rem; font-weight: 500;
+  }
+  .footer-col ul { list-style: none; }
+  .footer-col li { margin-bottom: 0.5rem; }
+  .footer-col a {
+    text-decoration: none; color: rgba(255,255,255,0.5); font-size: 0.85rem; font-weight: 300;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover { color: #fff; }
+  .footer-bottom {
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+    font-size: 0.75rem;
+  }
+  .footer-bottom a { color: rgba(255,255,255,0.3); text-decoration: none; }
+  .footer-bottom a:hover { color: rgba(255,255,255,0.6); }
+
+  /* ── MODAL (Payment) ── */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; z-index: 200;
+    background: rgba(0,0,0,0.55); align-items: center; justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: #fff; padding: 2.5rem; max-width: 480px; width: 90%;
+    position: relative; border-radius: 2px;
+    animation: slideUp 0.25s ease;
+  }
+  @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: none; opacity: 1; } }
+  .modal-close {
+    position: absolute; top: 1rem; right: 1.2rem;
+    background: none; border: none; font-size: 1.3rem; cursor: pointer;
+    color: var(--grey); line-height: 1;
+  }
+  .modal h3 { font-family: var(--serif); font-size: 1.6rem; font-weight: 400; margin-bottom: 0.3rem; }
+  .modal .modal-price { font-size: 1.1rem; color: var(--blue); font-weight: 500; margin-bottom: 1.5rem; font-family: var(--serif); }
+  .modal label { font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; display: block; margin-bottom: 0.3rem; color: var(--grey); }
+  .modal input, .modal select {
+    width: 100%; padding: 0.7rem 0.9rem; border: 1px solid var(--rule);
+    font-family: var(--sans); font-size: 0.9rem; margin-bottom: 1rem;
+    outline: none; border-radius: 2px; color: var(--ink);
+    background: var(--paper);
+  }
+  .modal input:focus, .modal select:focus { border-color: var(--blue); }
+  .modal-note { font-size: 0.78rem; color: var(--grey); margin-top: 0.8rem; text-align: center; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .why-grid, .catalog-grid, .audience-grid, .trust-pillars { grid-template-columns: 1fr; }
+    .why-card, .audience-card { border-right: none; border-bottom: 1px solid var(--rule); }
+    .sample-inner, .global-inner { grid-template-columns: 1fr; }
+    .footer-top { grid-template-columns: 1fr 1fr; }
+    nav .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .nav-links.open {
+      display: flex; flex-direction: column; position: fixed;
+      top: 60px; left: 0; right: 0; background: #fff;
+      padding: 2rem; gap: 1.5rem; border-bottom: 1px solid var(--rule);
+      z-index: 99;
+    }
+  }
+  @media (max-width: 600px) {
+    .footer-top { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 2.4rem; }
+  }
+
+  /* ── ANIMATE ON SCROLL ── */
+  .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed; bottom: 2rem; right: 2rem; z-index: 300;
+    background: var(--ink); color: #fff;
+    padding: 0.9rem 1.5rem; font-size: 0.85rem; border-radius: 2px;
+    transform: translateY(80px); opacity: 0;
+    transition: all 0.3s ease; pointer-events: none;
+  }
+  .toast.show { transform: none; opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="#">AXIOM <span>NOTES</span></a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#catalog">Catalog</a></li>
+    <li><a href="#sample">Sample</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#catalog" class="nav-cta">Buy Notes</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg">
+    <div class="math-symbols" style="font-size:18vw;top:10%;left:5%;opacity:0.6;">∑</div>
+    <div class="math-symbols" style="font-size:12vw;top:20%;right:8%;animation-delay:4s;">∫</div>
+    <div class="math-symbols" style="font-size:9vw;bottom:25%;left:12%;animation-delay:8s;">∂</div>
+    <div class="math-symbols" style="font-size:14vw;bottom:20%;right:5%;animation-delay:2s;">∞</div>
+    <div class="math-symbols" style="font-size:7vw;top:50%;left:50%;animation-delay:6s;">π</div>
+    <div class="math-symbols" style="font-size:10vw;top:40%;left:20%;animation-delay:3s;">φ</div>
+    <div class="math-symbols" style="font-size:8vw;top:60%;right:20%;animation-delay:9s;">Δ</div>
+    <div class="math-symbols" style="font-size:6vw;top:15%;left:40%;animation-delay:5s;">∇</div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Axiom Notes</div>
+    <h1>Mathematics Notes<br>That <em>Think Clearly</em></h1>
+    <p class="hero-sub">Professionally LaTeX-typeset mathematics notes designed for students who take their learning seriously.</p>
+    <div class="hero-targets">
+      <span class="tag">Olympiads</span>
+      <span class="tag">University Mathematics</span>
+      <span class="tag">IIT-JEE</span>
+      <span class="tag">Self Learners</span>
+    </div>
+    <div class="hero-actions">
+      <a href="#catalog" class="btn-primary">Browse Notes</a>
+      <a href="#sample" class="btn-outline">View Sample</a>
+    </div>
+  </div>
+  <div class="hero-scroll">Scroll</div>
+</section>
+
+<hr class="rule">
+
+<!-- WHY LATEX NOTES -->
+<section class="why" id="why">
+  <div class="container">
+    <div class="section-label reveal">Why Our Notes</div>
+    <h2 class="section-title reveal">Why Our Notes<br>Are Different</h2>
+    <div class="why-grid reveal">
+      <div class="why-card">
+        <div class="why-num">01</div>
+        <div class="why-icon">⊢</div>
+        <h3>Precision</h3>
+        <p>Every note is written using LaTeX — the professional typesetting system used in mathematical research journals worldwide. No ambiguity, no handwriting artifacts.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-num">02</div>
+        <div class="why-icon">◻</div>
+        <h3>Clarity</h3>
+        <p>Concepts are explained through formal definitions, worked illustrations, and carefully chosen example problems that build genuine understanding.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-num">03</div>
+        <div class="why-icon">→</div>
+        <h3>Focus</h3>
+        <p>No filler, no padding. Each page contains only what you need to understand the mathematics deeply. Structured like a research monograph, accessible like a textbook.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- SAMPLE PREVIEW -->
+<section class="sample" id="sample">
+  <div class="container">
+    <div class="section-label reveal">Free Sample</div>
+    <h2 class="section-title reveal">See the Difference</h2>
+    <div class="sample-inner">
+      <div class="sample-doc reveal">
+        <div class="doc-title">Real Analysis Essentials — §2.3</div>
+        <div class="doc-section">
+          <div class="doc-section-label">Theorem 2.3.1 (Mean Value Theorem)</div>
+          <div class="doc-box">
+            Let \(f : [a,b] \to \mathbb{R}\) be continuous on \([a,b]\) and differentiable on \((a,b)\). Then there exists \(c \in (a,b)\) such that
+            <div class="doc-math">\[ f'(c) = \frac{f(b)-f(a)}{b-a} \]</div>
+          </div>
+        </div>
+        <div class="doc-section">
+          <div class="doc-section-label">Proof</div>
+          <div class="doc-proof">
+            Define \(g(x) = f(x) - \frac{f(b)-f(a)}{b-a}(x-a)\). Then \(g\) is continuous on \([a,b]\), differentiable on \((a,b)\), and \(g(a)=g(b)=f(a)\). By Rolle's Theorem, there exists \(c \in (a,b)\) with \(g'(c)=0\), giving the result. <span class="qed">□</span>
+          </div>
+        </div>
+        <div class="doc-section">
+          <div class="doc-section-label">Example</div>
+          <div class="doc-proof">
+            Let \(f(x)=x^2\) on \([1,3]\). Then \(\frac{f(3)-f(1)}{3-1}=\frac{8}{2}=4\). Since \(f'(x)=2x\), we find \(c=2 \in (1,3)\). ✓
+          </div>
+        </div>
+      </div>
+      <div class="sample-info reveal">
+        <h3>What You Get In Every Note</h3>
+        <p>Our notes are written to the standard of undergraduate mathematics — clear, complete, and beautiful. Each section follows a deliberate structure.</p>
+        <ul class="feature-list">
+          <li>Formal definitions with precise language</li>
+          <li>Complete proofs with every step justified</li>
+          <li>Worked examples with commentary</li>
+          <li>Diagrams and geometric intuition</li>
+          <li>Problem sets with solutions</li>
+        </ul>
+        <a href="#" class="btn-primary" onclick="showToast('Sample PDF sent to your browser. Check downloads.'); return false;">Download Free Sample</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- CATALOG -->
+<section class="catalog" id="catalog">
+  <div class="container">
+    <div class="section-label reveal">The Collection</div>
+    <h2 class="section-title reveal">Notes Catalog</h2>
+    <p class="section-sub reveal">Premium typeset notes across all major areas. Instant delivery after purchase.</p>
+    <div class="catalog-grid">
+
+      <div class="card reveal">
+        <div class="card-level">Higher Mathematics</div>
+        <h3>Groups and Rings</h3>
+        <ul class="card-topics">
+          <li>Groups &amp; Subgroups</li>
+          <li>Cyclic Groups</li>
+          <li>Homomorphisms &amp; Isomorphisms</li>
+          <li>Ring Theory Foundations</li>
+        </ul>
+        <div class="card-meta">
+          <span>📄 120 pages</span>
+          <span>⭐ Abstract Algebra</span>
+        </div>
+        <div class="card-price">₹249 <small>one-time</small></div>
+        <div class="card-actions">
+          <a href="#sample" class="btn-sm-outline">Preview</a>
+          <a href="#" class="btn-sm-primary" onclick="openModal('Groups and Rings','₹249'); return false;">Buy</a>
+        </div>
+      </div>
+
+      <div class="card reveal">
+        <div class="card-level">Higher Mathematics</div>
+        <h3>Real Analysis Essentials</h3>
+        <ul class="card-topics">
+          <li>Limits &amp; Continuity</li>
+          <li>Differentiability &amp; Derivatives</li>
+          <li>Mean Value Theorems</li>
+          <li>Riemann Integration</li>
+        </ul>
+        <div class="card-meta">
+          <span>📄 140 pages</span>
+          <span>⭐ Analysis</span>
+        </div>
+        <div class="card-price">₹299 <small>one-time</small></div>
+        <div class="card-actions">
+          <a href="#sample" class="btn-sm-outline">Preview</a>
+          <a href="#" class="btn-sm-primary" onclick="openModal('Real Analysis Essentials','₹299'); return false;">Buy</a>
+        </div>
+      </div>
+
+      <div class="card reveal">
+        <div class="card-level">Olympiad</div>
+        <h3>Olympiad Combinatorics</h3>
+        <ul class="card-topics">
+          <li>Pigeonhole Principle</li>
+          <li>Invariants &amp; Monovariants</li>
+          <li>Graph Theory Essentials</li>
+          <li>Advanced Counting</li>
+        </ul>
+        <div class="card-meta">
+          <span>📄 100 pages</span>
+          <span>⭐ Combinatorics</span>
+        </div>
+        <div class="card-price">₹249 <small>one-time</small></div>
+        <div class="card-actions">
+          <a href="#sample" class="btn-sm-outline">Preview</a>
+          <a href="#" class="btn-sm-primary" onclick="openModal('Olympiad Combinatorics','₹249'); return false;">Buy</a>
+        </div>
+      </div>
+
+      <div class="card reveal">
+        <div class="card-level">High School</div>
+        <h3>Calculus Foundations</h3>
+        <ul class="card-topics">
+          <li>Limits from First Principles</li>
+          <li>Differentiation Rules</li>
+          <li>Integration Techniques</li>
+          <li>Applications &amp; Optimization</li>
+        </ul>
+        <div class="card-meta">
+          <span>📄 110 pages</span>
+          <span>⭐ Calculus</span>
+        </div>
+        <div class="card-price">₹199 <small>one-time</small></div>
+        <div class="card-actions">
+          <a href="#sample" class="btn-sm-outline">Preview</a>
+          <a href="#" class="btn-sm-primary" onclick="openModal('Calculus Foundations','₹199'); return false;">Buy</a>
+        </div>
+      </div>
+
+      <div class="card reveal">
+        <div class="card-level">Olympiad</div>
+        <h3>Number Theory</h3>
+        <ul class="card-topics">
+          <li>Divisibility &amp; Primes</li>
+          <li>Modular Arithmetic</li>
+          <li>Diophantine Equations</li>
+          <li>Chinese Remainder Theorem</li>
+        </ul>
+        <div class="card-meta">
+          <span>📄 115 pages</span>
+          <span>⭐ Number Theory</span>
+        </div>
+        <div class="card-price">₹249 <small>one-time</small></div>
+        <div class="card-actions">
+          <a href="#sample" class="btn-sm-outline">Preview</a>
+          <a href="#" class="btn-sm-primary" onclick="openModal('Number Theory','₹249'); return false;">Buy</a>
+        </div>
+      </div>
+
+      <div class="card reveal">
+        <div class="card-level">Higher Mathematics</div>
+        <h3>Linear Algebra</h3>
+        <ul class="card-topics">
+          <li>Vector Spaces &amp; Bases</li>
+          <li>Linear Transformations</li>
+          <li>Eigenvalues &amp; Diagonalization</li>
+          <li>Inner Product Spaces</li>
+        </ul>
+        <div class="card-meta">
+          <span>📄 130 pages</span>
+          <span>⭐ Algebra</span>
+        </div>
+        <div class="card-price">₹299 <small>one-time</small></div>
+        <div class="card-actions">
+          <a href="#sample" class="btn-sm-outline">Preview</a>
+          <a href="#" class="btn-sm-primary" onclick="openModal('Linear Algebra','₹299'); return false;">Buy</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- AUDIENCE -->
+<section class="audience" id="audience">
+  <div class="container">
+    <div class="section-label reveal">For Whom</div>
+    <h2 class="section-title reveal">Who These Notes Are For</h2>
+    <div class="audience-grid reveal">
+      <div class="audience-card">
+        <div class="audience-emoji">📘</div>
+        <h3>High School Students</h3>
+        <p>Preparing for board exams, IIT-JEE, or simply building a rigorous mathematical foundation beyond the classroom.</p>
+      </div>
+      <div class="audience-card">
+        <div class="audience-emoji">📗</div>
+        <h3>Olympiad Aspirants</h3>
+        <p>Training for IMO, RMO, INMO, or any national olympiad program. Our notes address the exact thinking required.</p>
+      </div>
+      <div class="audience-card">
+        <div class="audience-emoji">📕</div>
+        <h3>Self-Learners</h3>
+        <p>Anyone who wants to learn mathematics the right way — with rigor, proofs, and the satisfaction of genuine understanding.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- TRUST -->
+<section class="trust" id="trust">
+  <div class="container">
+    <div class="section-label reveal">The Author</div>
+    <h2 class="section-title reveal">Written by a<br>Mathematics Builder</h2>
+    <p class="section-sub reveal">These notes are written by someone obsessed with clarity, structure, and mathematical beauty. Every concept earns its place on the page.</p>
+    <div class="trust-pillars reveal">
+      <div class="trust-pillar">
+        <h4>Mathematical Definition</h4>
+        <p>Every concept begins with a precise, unambiguous formal definition — no hand-waving, no approximations.</p>
+      </div>
+      <div class="trust-pillar">
+        <h4>Visual Illustration</h4>
+        <p>Diagrams and geometric intuition accompany formal proofs to build deep, lasting understanding.</p>
+      </div>
+      <div class="trust-pillar">
+        <h4>Example Problem</h4>
+        <p>Each section closes with worked examples that demonstrate the concepts in practice, with full solutions.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GLOBAL -->
+<section class="global-section" id="global">
+  <div class="container">
+    <div class="global-inner">
+      <div class="reveal">
+        <div class="section-label">Availability</div>
+        <h2 class="section-title">Available Worldwide</h2>
+        <p class="section-sub">Payments accepted globally. Instant digital delivery to your inbox — no waiting, no shipping.</p>
+        <div class="regions">
+          <span class="region">🇮🇳 India</span>
+          <span class="region">🇺🇸 USA</span>
+          <span class="region">🇬🇧 Europe</span>
+          <span class="region">🇯🇵 Asia</span>
+          <span class="region">🌍 Worldwide</span>
+        </div>
+      </div>
+      <div class="delivery-box reveal">
+        <div class="delivery-item">
+          <div class="delivery-icon">⚡</div>
+          <div>
+            <h4>Instant Delivery</h4>
+            <p>Download link sent to your email immediately after payment confirmation.</p>
+          </div>
+        </div>
+        <div class="delivery-item">
+          <div class="delivery-icon">🔒</div>
+          <div>
+            <h4>Secure Download</h4>
+            <p>All PDFs are delivered via encrypted, time-limited secure links.</p>
+          </div>
+        </div>
+        <div class="delivery-item">
+          <div class="delivery-icon">∞</div>
+          <div>
+            <h4>Lifetime Access</h4>
+            <p>Purchase once. Re-download anytime from your account dashboard.</p>
+          </div>
+        </div>
+        <div class="delivery-item">
+          <div class="delivery-icon">💳</div>
+          <div>
+            <h4>All Payment Methods</h4>
+            <p>UPI, cards, net banking, PayPal, Stripe — all accepted worldwide.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- FAQ -->
+<section class="faq-section" id="faq">
+  <div class="container">
+    <div class="section-label reveal">Questions</div>
+    <h2 class="section-title reveal">Frequently Asked</h2>
+    <div class="faq-list reveal">
+      <div class="faq-item">
+        <div class="faq-q">Are the notes downloadable? <span class="faq-toggle">+</span></div>
+        <div class="faq-a">Yes. Immediately after payment, you receive a secure download link by email. You can download and keep your PDF forever.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Are these handwritten notes? <span class="faq-toggle">+</span></div>
+        <div class="faq-a">No. Every note is professionally typeset using LaTeX — the same system used for mathematical research papers and textbooks. The result is a clean, readable, and beautiful document.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Do I get lifetime access? <span class="faq-toggle">+</span></div>
+        <div class="faq-a">Yes. Pay once and you have permanent access. You can re-download your notes from your account at any time, indefinitely.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Is there a free sample I can view first? <span class="faq-toggle">+</span></div>
+        <div class="faq-a">Yes. We provide a free sample from our Real Analysis Essentials notes. You can download it from the Sample section on this page to judge the quality before purchasing.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What level of mathematics background is required? <span class="faq-toggle">+</span></div>
+        <div class="faq-a">Each note specifies its level (High School / Olympiad / Higher Mathematics). High School notes require standard Class 11–12 background. Higher Mathematics notes assume exposure to basic proof writing.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Can I pay in currencies other than INR? <span class="faq-toggle">+</span></div>
+        <div class="faq-a">Yes. We accept all major currencies. Prices are shown in INR but your payment processor will convert automatically at the current exchange rate.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2 class="reveal">Build Your<br>Mathematical Mind</h2>
+  <p class="reveal">Precision mathematics. Beautifully typeset. Instantly delivered.</p>
+  <a href="#catalog" class="btn-primary reveal">Browse Notes</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand-name">AXIOM NOTES</div>
+        <div class="footer-tagline">Precision Mathematics. Beautifully Typeset. For students who demand clarity and rigor.</div>
+      </div>
+      <div class="footer-col">
+        <h4>Notes</h4>
+        <ul>
+          <li><a href="#catalog">Groups &amp; Rings</a></li>
+          <li><a href="#catalog">Real Analysis</a></li>
+          <li><a href="#catalog">Combinatorics</a></li>
+          <li><a href="#catalog">Linear Algebra</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Info</h4>
+        <ul>
+          <li><a href="#sample">Free Sample</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Terms of Use</a></li>
+          <li><a href="#">Refund Policy</a></li>
+          <li><a href="#">Privacy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Axiom Notes. All rights reserved.</span>
+      <span>Built for mathematicians, by a mathematician.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- PAYMENT MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <h3 id="modalTitle">Note Title</h3>
+    <div class="modal-price" id="modalPrice">₹249</div>
+    <label>Full Name</label>
+    <input type="text" placeholder="Your name" id="buyerName" />
+    <label>Email Address</label>
+    <input type="email" placeholder="your@email.com" id="buyerEmail" />
+    <label>Payment Method</label>
+    <select id="paymentMethod">
+      <option value="">Select payment method</option>
+      <option>UPI</option>
+      <option>Credit / Debit Card</option>
+      <option>Net Banking</option>
+      <option>PayPal</option>
+    </select>
+    <button class="btn-primary" style="width:100%;margin-top:0.5rem;" onclick="completePurchase()">Complete Purchase →</button>
+    <div class="modal-note">🔒 Secure checkout · Instant PDF delivery · Lifetime access</div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// Nav toggle
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+// Reveal on scroll
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), 80);
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+reveals.forEach(el => observer.observe(el));
+
+// Stagger child reveals in grids
+document.querySelectorAll('.catalog-grid .card, .why-card').forEach((el, i) => {
+  el.style.transitionDelay = (i % 3) * 0.1 + 's';
+});
+
+// FAQ accordion
+document.querySelectorAll('.faq-q').forEach(q => {
+  q.addEventListener('click', () => {
+    const item = q.parentElement;
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+  });
+});
+
+// Modal
+let currentNote = '';
+function openModal(title, price) {
+  currentNote = title;
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalPrice').textContent = price;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+document.getElementById('modalOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+function completePurchase() {
+  const name = document.getElementById('buyerName').value.trim();
+  const email = document.getElementById('buyerEmail').value.trim();
+  const method = document.getElementById('paymentMethod').value;
+  if (!name || !email || !method) { showToast('Please fill all fields.'); return; }
+  if (!email.includes('@')) { showToast('Please enter a valid email.'); return; }
+  closeModal();
+  showToast(`✓ Purchase confirmed! Download link sent to ${email}`);
+}
+
+// Toast
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+</script>
+</body>
+</html>
